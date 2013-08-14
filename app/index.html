@@ -20,16 +20,50 @@
     <body>
         <div class="container">
             <div class="hero-unit">
-                <h1>'Allo, 'Allo!</h1>
-                <p>You now have</p>
-                <ul>
-                    <li>HTML5 Boilerplate</li>
-                    <li>Twitter Bootstrap</li>
-                </ul>
-                <p>installed.</p>
-                <h3>Enjoy coding! - Yeoman</h3>
-            </div>
+                <div id="todoapp">
+
+                    <header>
+                      <h1>Todos</h1>
+                      <input id="new-todo" type="text" placeholder="What needs to be done?">
+                    </header>
+
+                    <section id="main">
+                      <input id="toggle-all" type="checkbox">
+                      <label for="toggle-all">Mark all as complete</label>
+                      <ul id="todo-list"></ul>
+                    </section>
+
+                    <footer>
+                      <a id="clear-completed">Clear completed</a>
+                      <div id="todo-count"></div>
+                    </footer>
+
+                  </div>
+
+                  <div id="instructions">
+                    Double-click to edit a todo.
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Templates -->
+
+      <script type="text/template" id="item-template">
+        <div class="view">
+          <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+          <label><%- title %></label>
+          <a class="destroy"></a>
         </div>
+        <input class="edit" type="text" value="<%- title %>" />
+      </script>
+
+      <script type="text/template" id="stats-template">
+        <% if (done) { %>
+          <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
+        <% } %>
+        <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+      </script>
 
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -42,19 +76,11 @@
             e=o.createElement(i);r=o.getElementsByTagName(i)[0];
             e.src='//www.google-analytics.com/analytics.js';
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-            ga('create','UA-XXXXX-X');ga('send','pageview');
+            ga('create','UA-41019038-2');ga('send','pageview');
         </script>
 
-        <!-- build:js scripts/main.js -->
-        <script src="bower_components/jquery/jquery.js"></script>
-        <script src="scripts/main.js"></script>
-        <!-- endbuild -->
-
-        <!-- build:js(.tmp) scripts/coffee.js -->
-        <script src="scripts/hello.js"></script>
-        <!-- endbuild -->
-
         <!-- build:js scripts/plugins.js -->
+        <script src="bower_components/jquery/jquery.js"></script>
         <script src="bower_components/sass-bootstrap/js/bootstrap-affix.js"></script>
         <script src="bower_components/sass-bootstrap/js/bootstrap-alert.js"></script>
         <script src="bower_components/sass-bootstrap/js/bootstrap-dropdown.js"></script>
@@ -68,6 +94,13 @@
         <script src="bower_components/sass-bootstrap/js/bootstrap-scrollspy.js"></script>
         <script src="bower_components/sass-bootstrap/js/bootstrap-collapse.js"></script>
         <script src="bower_components/sass-bootstrap/js/bootstrap-tab.js"></script>
+        <script src="bower_components/underscore/underscore.js"></script>
+        <script src="bower_components/backbone/backbone.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js(.tmp) scripts/main.js -->
+        <script src="scripts/localStorage.js"></script>
+        <script src="scripts/main.js"></script>
         <!-- endbuild -->
 </body>
 </html>
