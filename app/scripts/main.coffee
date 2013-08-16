@@ -343,8 +343,6 @@ AppView = Backbone.View.extend
     @footer = @$ 'footer'
     @main = $ '#main'
 
-    Todos.fetch()
-
   render: () ->
     done = Todos.done().length
     remaining = Todos.remaining().length
@@ -402,12 +400,24 @@ MyModelView = Backbone.View.extend
 
   template: _.template($('#mymodel-template').html())
 
+  events:
+    'click #update': 'onUpdateClick'
+    'click #delete': 'onDeleteClick'
+
   initialize: () ->
+    @listenTo mymodel, 'destroy', @render
     @listenTo mymodel, 'all', @render
 
     @render()
 
+  onUpdateClick: (event) ->
+    mymodel.set
+      rand: Math.random()
+
+  onDeleteClick: (event) ->
+    mymodel.destroy()
+
   render: () ->
     @$el.html @template(mymodel.toJSON())
 
-
+modelview = new MyModelView
