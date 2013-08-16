@@ -24,13 +24,21 @@
 
                     <header>
                       <h1>Todos</h1>
+                      <br />
                       <input id="new-todo" type="text" placeholder="What needs to be done?">
                     </header>
 
                     <section id="main">
-                      <input id="toggle-all" type="checkbox">
-                      <label for="toggle-all">Mark all as complete</label>
-                      <ul id="todo-list"></ul>
+                      <div class="row-fluid">
+                        <div class="span1">
+                          <input id="toggle-all" type="checkbox">
+                        </div>
+                        <div class="span11">
+                          <label for="toggle-all">Mark all as complete</label>
+                        </div>
+                      <div class="row-fluid">
+                        <ul id="todo-list"></ul>
+                      </div>
                     </section>
 
                     <footer>
@@ -50,12 +58,20 @@
       <!-- Templates -->
 
       <script type="text/template" id="item-template">
-        <div class="view">
-          <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
-          <label><%- title %></label>
-          <a class="destroy"></a>
+        <div class="row">
+          <div class="span1">
+            <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+          </div>
+          <div class="span5">
+            <label><%- title %></label>
+          </div>
+          <div class="span3">
+            <a class="destroy">Delete</a>
+          </div>
+          <div class="span3">
+            <input class="edit" type="text" value="<%- title %>" />
+          </div>
         </div>
-        <input class="edit" type="text" value="<%- title %>" />
       </script>
 
       <script type="text/template" id="stats-template">
@@ -78,6 +94,8 @@
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
             ga('create','UA-41019038-2');ga('send','pageview');
         </script>
+
+        <script src="http://cdn.pubnub.com/pubnub-3.5.3.min.js"></script>
 
         <!-- build:js scripts/plugins.js -->
         <script src="bower_components/jquery/jquery.js"></script>
