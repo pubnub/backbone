@@ -2,6 +2,8 @@ pubnub = PUBNUB.init
   subscribe_key: 'sub-c-4c7f1748-ced1-11e2-a5be-02ee2ddab7fe'
   publish_key: 'pub-c-6dd9f234-e11e-4345-92c4-f723de52df70'
 
+@pubnub = pubnub
+
 Backbone.PubNub = (ref, name) ->
   @name = name
   @ref = ref
@@ -13,8 +15,6 @@ Backbone.PubNub = (ref, name) ->
     channel: @channel
     callback: (message) =>
       message = JSON.parse message
-
-      console.log "SUBSCRIBE", message
 
       unless message.uuid is @uuid
         switch message.method
@@ -31,8 +31,6 @@ _.extend Backbone.PubNub.prototype,
       options: options
       uuid: @uuid
     message = JSON.stringify message
-
-    console.log "PUBLISH", message
 
     @ref.publish
       channel: @channel
@@ -75,9 +73,6 @@ _.extend Backbone.PubNub.prototype,
     model
 
 Backbone.PubNub.sync = (method, model, options) ->
-  console.log("SYNC", method, model, options)
-  console.log model.toJSON()
-
   pubnub = model.pubnub ? model.collection.pubnub
 
   try
@@ -129,24 +124,23 @@ Backbone.PubNub.Collection = Backbone.Collection.extend
       @pubnub = options.pubnub
 
     @uuid = @pubnub.uuid()
-    @channel = "backbone-#{@name}"
+    @channel = "backbone-collection-#{@name}"
+
+    updateModel = (model) ->
+      @publish "update", model
+
+    @listenTo this, 'change', updateModel, this
 
     @pubnub.subscribe
       channel: @channel
       callback: (message) =>
         message = JSON.parse message
 
-        console.log "SUBSCRIBE", message
-
         unless message.uuid is @uuid
           switch message.method
             when "create" then @_onAdded message.model, message.options
             when "update" then @_onChanged message.model, message.options
             when "delete" then @_onRemoved message.model, message.options
-
-    updateModel = (model) ->
-      # Nothing
-    @listenTo this, 'change', updateModel, this
 
   _onAdded: (model, options) ->
     Backbone.Collection.prototype.add.apply this, [model, options]
@@ -192,7 +186,59 @@ Backbone.PubNub.Model = Backbone.Model.extend
   sync: () ->
     console.log "Backbone.PubNub.Model ignores sync calls"
 
-Todo = Backbone.PubNub.Model.extend
+  # Publishes a change to the pubnub channel
+  publish: (method, model, options) ->
+    message =
+      method: method
+      model: model
+      options: options
+      uuid: @uuid
+    message = JSON.stringify message
+
+    @pubnub.publish
+      channel: @channel
+      message: message
+
+  constructor: (model, options) ->
+    Backbone.Model.apply this, arguments
+
+    if options and options.pubnub and options.name
+      @pubnub = options.pubnub
+      @name = options.name
+
+    @uuid = @pubnub.uuid()
+    @channel = "backbone-model-#{@name}"
+
+    updateModel = (model, options) ->
+      @publish "update", model, options
+
+    @listenTo this, 'change', updateModel, this
+
+    @pubnub.subscribe
+      channel: @channel
+      callback: (message) =>
+        message = JSON.parse message
+
+        unless message.uuid is @uuid
+          switch message.method
+            when "update" then @_onChanged message.model, message.options
+            when "delete" then @_onRemoved message.options
+
+  _onChanged: (model, options) ->
+    diff = _.difference _.keys(@attributes), _.keys(model)
+    _.each diff, (key) =>
+      @unset key
+
+    @set model
+
+  _onRemoved: (options) ->
+    Backbone.Model.prototype.destroy.apply this, arguments
+
+  destroy: (options) ->
+    @publish "delete", null, options
+    Backbone.Model.prototype.destroy.apply this, arguments
+
+Todo = Backbone.Model.extend
   defaults: () ->
     {
       title: "empty todo..."
@@ -338,3 +384,30 @@ AppView = Backbone.View.extend
 
 App = new AppView
     
+
+MyModel = Backbone.PubNub.Model.extend
+  name: "MyModel"
+  pubnub: pubnub
+
+  defaults: () ->
+    {
+      rand: Math.random()
+      title: "My Model"
+    }
+
+mymodel = new MyModel
+
+MyModelView = Backbone.View.extend
+  el: $ '#mymodel'
+
+  template: _.template($('#mymodel-template').html())
+
+  initialize: () ->
+    @listenTo mymodel, 'all', @render
+
+    @render()
+
+  render: () ->
+    @$el.html @template(mymodel.toJSON())
+
+
