@@ -158,8 +158,8 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '<%= yeoman.app %>/scripts',
                     src: 'backbone-pubnub.coffee',
-                    dest: 'lib',
-                    ext: '.<%= packageInfo.version %>.js'
+                    dest: '',
+                    ext: '.js'
                 }]
             }
         },
@@ -213,10 +213,10 @@ module.exports = function (grunt) {
             lib: {
                 files: [{
                     expand: true,
-                    cwd: 'lib/',
-                    src: 'backbone-pubnub.<%= packageInfo.version %>.js',
-                    dest: 'lib',
-                    ext: '.<%= packageInfo.version %>.min.js'
+                    cwd: '',
+                    src: 'backbone-pubnub.js',
+                    dest: '',
+                    ext: '.min.js'
                 }]
             }
         },
@@ -386,11 +386,11 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
         'jshint',
         'test',
-        'build'
+        'build',
+        'lib'
     ]);
 
     grunt.registerTask('lib', [
-        'clean:lib',
         'coffee:lib',
         'uglify:lib'
     ]);
