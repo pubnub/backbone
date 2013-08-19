@@ -6,6 +6,8 @@ var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
 
+var fs = require('fs');
+
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -22,8 +24,12 @@ module.exports = function (grunt) {
         dist: 'dist'
     };
 
+    // Grab the package information form the bower.json file
+    var packageInfo = JSON.parse(fs.readFileSync('bower.json'));
+
     grunt.initConfig({
         yeoman: yeomanConfig,
+        packageInfo: packageInfo,
         watch: {
             coffee: {
                 files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
@@ -106,7 +112,8 @@ module.exports = function (grunt) {
                     ]
                 }]
             },
-            server: '.tmp'
+            server: '.tmp',
+            lib: 'lib'
         },
         jshint: {
             options: {
@@ -144,6 +151,15 @@ module.exports = function (grunt) {
                     src: '{,*/}*.coffee',
                     dest: '.tmp/spec',
                     ext: '.js'
+                }]
+            },
+            lib: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= yeoman.app %>/scripts',
+                    src: 'backbone-pubnub.coffee',
+                    dest: 'lib',
+                    ext: '.<%= packageInfo.version %>.js'
                 }]
             }
         },
@@ -193,9 +209,17 @@ module.exports = function (grunt) {
         // not enabled since usemin task does concat and uglify
         // check index.html to edit your build targets
         // enable this task if you prefer defining your build targets here
-        /*uglify: {
-            dist: {}
-        },*/
+        uglify: {
+            lib: {
+                files: [{
+                    expand: true,
+                    cwd: 'lib/',
+                    src: 'backbone-pubnub.<%= packageInfo.version %>.js',
+                    dest: 'lib',
+                    ext: '.<%= packageInfo.version %>.min.js'
+                }]
+            }
+        },
         rev: {
             dist: {
                 files: {
@@ -363,5 +387,11 @@ module.exports = function (grunt) {
         'jshint',
         'test',
         'build'
+    ]);
+
+    grunt.registerTask('lib', [
+        'clean:lib',
+        'coffee:lib',
+        'uglify:lib'
     ]);
 };
