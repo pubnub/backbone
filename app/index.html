@@ -63,8 +63,8 @@
 
       <script type="text/template" id="mymodel-template">
         <h3>My Model</h3>
-        <p><%= rand %></p>
-        <p><%= title %></p>
+        <p>Rand: <%= rand %></p>
+        <p>Title: <%= title %></p>
         <button id="update">Update</button>
         <button id="delete">Delete</button>
       </script>
@@ -131,7 +131,7 @@
         <!-- endbuild -->
 
         <!-- build:js(.tmp) scripts/main.js -->
-        <!-- <script src="scripts/localStorage.js"></script> -->
+        <script src="scripts/backbone-pubnub.js"></script>
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
 </body>
