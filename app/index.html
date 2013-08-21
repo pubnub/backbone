@@ -3,97 +3,211 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <!-- build:css(.tmp) styles/main.css -->
-        <link rel="stylesheet" href="styles/main.css">
-        <!-- endbuild -->
-        <!-- build:js scripts/vendor/modernizr.js -->
-        <script src="bower_components/modernizr/modernizr.js"></script>
-        <!-- endbuild -->
-    </head>
-    <body>
-        <div class="container">
-            <div class="hero-unit">
-                <div id="todoapp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Backbone.js and PubNub Integration - Real Time Backbone Collections and Models</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
 
-                    <header>
-                      <h1>Todos</h1>
-                      <br />
-                      <input id="new-todo" type="text" placeholder="What needs to be done?">
-                    </header>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
 
-                    <section id="main">
-                      <div class="row-fluid">
-                        <div class="span1">
-                          <input id="toggle-all" type="checkbox">
-                        </div>
-                        <div class="span11">
-                          <label for="toggle-all">Mark all as complete</label>
-                        </div>
-                      <div class="row-fluid">
-                        <ul id="todo-list"></ul>
-                      </div>
-                    </section>
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="bower_components/google-code-prettify/src/prettify.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+</head>
+<body>
+  <div class="title">
+    <div class="container">
+      <div class="row-fluid">
+        <div class="span12">
+          <h1>Backbone.js + PubNub</h1>
+          <h3>Real-Time Multi-User Backbone Collections and Models</h3>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                    <footer>
-                      <a id="clear-completed">Clear completed</a>
-                      <div id="todo-count"></div>
-                    </footer>
+  <div class="main">
+    <div class="container">
+      <div class="row-fluid border-row">
+        <div class="span6">
+          <div id="todoapp">
+            <header>
+              <h3>Todos</h3>
+              <input id="new-todo" type="text" placeholder="What needs to be done?">
+              <br />
+              <input id="toggle-all" type="checkbox">
+              <label for="toggle-all">Mark all as complete</label>
+            </header>
 
-                  </div>
-
-                  <div id="instructions">
-                    Double-click to edit a todo.
-                  </div>
+            <section id="main">
+              <div class="row-fluid">
+                <ul id="todo-list"></ul>
               </div>
+            </section>
+
+            <footer>
+              <a id="clear-completed">Clear completed</a>
+              <div id="todo-count"></div>
+
+              <div id="instructions">
+                Double-click to edit a todo.
+              </div>
+            </footer>
           </div>
+        </div>
+
+        <div class="span6 what-is-happening">
+          <div>
+            <h2>How It Works</h2>
+            <p>This is an example of the <a href="http://backbonejs.org/examples/todos/index.html" target="_blank">Backbone Todo List</a> extended with the real-time power of <a href="http://pubnub.com" target="_blank">PubNub</a>. Every time a change is detected in the collection of todos, that change is propagated to all other clients running the same demo in their browser. <a href="/" target="_blank">Open this page in another browser window</a> to see it in action!</p>
+            <a href="http://github.com/pubnub/backbone" class="btn btn-large"><i class="icon-github-sign"></i>View on GitHub</a>
+          </div>
+        </div>
       </div>
 
-      <div class="container">
-        <div class="hero-unit">
+      <div class="row-fluid">
+        <div class="span12">
+          <h3>Getting Started</h3>
+
+          <p>You can install the package using bower and <code>bower install pubnub-backbone</code> or by cloning this repository. Install the PubNub library along with this one in your html file like so, replacing the *&#39;s with the PubNub version you want to use:</p>
+
+          <p><pre class="prettyprint linenums">&lt;script src=&quot;http://cdn.pubnub.com/pubnub-*.*.*.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/path/to/backbone-pubnub.min.js&quot;&gt;&lt;/script&gt;</pre></p>
+
+          <p>From here the framework gives you three ways to integrate:</p>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+        <div class="span12">
+          <h3>Backbone.PubNub.Collection</h3>
+
+          <p>This collection takes the pubnub instance and a name and then publishes all create, update, and delete methods across clients using PubNub. The <code>name</code> property is used to generate a unique channel name so collections do not collide with each other. As a warning, with the same name will update each other regardless of what class they come from.</p>
+
+          <p><pre class="prettyprint linenums">
+var MyCollection = Backbone.PubNub.Collection.extend({
+  name: &#39;MyCollection&#39;, // Used to namespace the updates to this collection
+  pubnub: pubnub        // A global instance of PubNub
+});
+
+var myCollection = new MyCollection();</pre></p>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+        <div class="span12">
+          <h3>Backbone.sync</h3>
+
+          <p>The Backbone.sync method allows you to have a collection with a remote store, much like the LocalStorage module from the original Backbone Todos demo. This allows you to take updates from other clients when you want them and not automatically.</p>
+
+          <p><pre class="prettyprint linenums">
+var MyCollection = Backbone.Collection.extenc({
+  name: &#39;MyCollection&#39;, // Used to namespace the updates to this collection
+  pubnub: pubnub        // A global instance of PubNub
+});
+
+var myCollection = new MyCollection();</pre></p>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+        <div class="span12">
+          <h3>Backbone.PubNub.Model</h3>
+
+          <p>This will create a model that is updated in real-time across all instances. This works very similarly to the collection in that it publishes all changes across the PubNub network.</p>
+        </div>
+      </div>
+
+      <div class="row-fluid border-row">
+        <div class="span6">
+          <p><pre class="prettyprint linenums">
+var MyModel = Backbone.PubNub.Model.extend({
+  name: &#39;MyModel&#39;,
+  pubnub: pubnub
+});
+
+var myModel = new MyModel();</pre></p>
+        </div>
+        <div class="span6">
           <div id="mymodel"></div>
         </div>
       </div>
 
-      <script type="text/template" id="mymodel-template">
-        <h3>My Model</h3>
-        <p>Rand: <%= rand %></p>
-        <p>Title: <%= title %></p>
-        <button id="update">Update</button>
-        <button id="delete">Delete</button>
-      </script>
-
-      <!-- Templates -->
-
-      <script type="text/template" id="item-template">
-        <div class="row">
-          <div class="span1">
-            <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
-          </div>
-          <div class="span5">
-            <label><%- title %></label>
-          </div>
-          <div class="span3">
-            <a class="destroy">Delete</a>
-          </div>
-          <div class="span3">
-            <input class="edit" type="text" value="<%- title %>" />
-          </div>
+      <div class="row-fluid">
+        <div class="span4">
+          <h3>What is PubNub?</h3>
+          <p>Today’s users expect to interact in real-time. PubNub makes it easy for you to add real-time capabilities to your apps, without worrying about the infrastructure. Build apps that allow your users to engage in real-time across mobile, browser, desktop and server.</p>
         </div>
-      </script>
+        <div class="span8">
+          <h3>What Can I Build With PubNub?</h3>
+          <p>The PubNub Real-Time Network takes care of the connections, global infrastructure and key building blocks for real-time interactivity, so you can focus creating killer apps…</p>
+          <ul style="float: left; width: 50%;">
+            <li>Real-Time Collaboration</li>
+            <li>Machine-to-Machine</li>
+            <li>Real-Time Financial Streams</li>
+            <li>Real-Time Location Tracking</li>
+            <li>Call Triggering</li>
+          </ul>
+          <ul>
+            <li>2nd Screen Sync</li>
+            <li>Live Dashboards</li>
+            <li>Multi-Player Games</li>
+            <li>Group Chat Rooms</li>
+            <li>Thousands more…</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <script type="text/template" id="stats-template">
-        <% if (done) { %>
-          <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
-        <% } %>
-        <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
-      </script>
+  <div class="highlight">
+    <div class="container">
+      <div class="row-fluid">
+        <div class="span8">
+          <h3 class="call-to-action">Start Building Real-Time Apps Now!</h3>
+        </div>
+        <div class="span2 offset2">
+          <a href="http://pubnub.com/free-trial" class="btn btn-large" data-track="resource/click/cta-get-started">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center">
+    &copy; 2013 PubNub
+  </footer>
+
+  <script type="text/template" id="mymodel-template">
+    <h3>Real-Time Model</h3>
+    <p>Open this page in another window to see me update in real-time!</p>
+    <p>Rand: <%= rand %></p>
+    <button id="update">Set Random Number</button>
+  </script>
+
+  <!-- Templates -->
+
+  <script type="text/template" id="item-template">
+    <div class="view">
+      <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+      <label><%- title %></label>
+      <a class="destroy"><i class="icon-remove-circle"></i></a>
+    </div>
+    <input class="edit" type="text" value="<%- title %>" />
+  </script>
+
+  <script type="text/template" id="stats-template">
+    <% if (done) { %>
+      <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
+    <% } %>
+    <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+  </script>
 
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -128,7 +242,15 @@
         <script src="bower_components/sass-bootstrap/js/bootstrap-tab.js"></script>
         <script src="bower_components/underscore/underscore.js"></script>
         <script src="bower_components/backbone/backbone.js"></script>
+        <script src="bower_components/google-code-prettify/src/prettify.js"></script>
         <!-- endbuild -->
+
+        <script>
+        (function(){
+
+          prettyPrint();
+        })();
+        </script>
 
         <!-- build:js(.tmp) scripts/main.js -->
         <script src="scripts/backbone-pubnub.js"></script>

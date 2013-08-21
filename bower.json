@@ -3,7 +3,9 @@
   "version": "0.1.2",
   "dependencies": {
     "backbone": "~1.0.0",
-    "underscore": "~1.5.1"
+    "underscore": "~1.5.1",
+    "font-awesome": "~3.2.1",
+    "google-code-prettify": "~1.0.0"
   },
   "devDependencies": {
     "sass-bootstrap": "~2.3.0",

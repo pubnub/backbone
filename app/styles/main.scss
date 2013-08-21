@@ -1,7 +1,224 @@
 $iconSpritePath: "../images/glyphicons-halflings.png";
 $iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
+$FontAwesomePath: "/bower_components/font-awesome/font";
+$baseFontFamily: "FontAwesome";
 
-@import 'sass-bootstrap/lib/bootstrap';
+@import "sass-bootstrap/lib/bootstrap";
+@import "font-awesome/scss/font-awesome";
+@import "compass/css3";
+
+$red: #c50220;
+$dark-red: #ab021c;
+
+body {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.title {
+  @include background(
+    radial-gradient(rgba(255,255,255,.1) 55%, transparent 100%) 0 1px,
+    radial-gradient(rgba(255,255,255,.0) 15%, transparent 20%) 0 1px
+  );
+  background-color: $red;
+  background-size: 10px 10px;
+  background-attachment: fixed;
+
+  .span12 {
+    @include text-shadow(#555 1px 1px 1px);
+    color: white;
+    padding-top: 100px;
+    padding-bottom: 60px;
+    text-align: center;
+
+    h1, h3 {
+      font-weight: 100;
+    }
+  }
+}
+
+code {
+  color: #008;
+}
+
+pre.prettyprint {
+  border: 1px solid #CCC;
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  ol {
+    list-style-type: decimal;
+    padding-left: 10px;
+    color: #AAA;
+
+    li {
+      list-style-type: decimal !important;
+    }
+  }
+}
+
+.highlight {
+  background: $red;
+  color: white;
+  @include text-shadow(#555 1px 1px 1px);
+  margin-top: 20px;
+
+  a {
+    margin-top: 8px;
+  }
+}
+
+body > footer {
+  padding: 40px;
+}
+
+.row-fluid.border-row {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #CCC;
+}
+
+#todoapp {
+  background: white;
+  border: 1px solid #CCC;
+  border-top: 8px solid $red;
+  margin-top: 20px;
+  height: 450px;
+  position: relative;
+
+  header {
+    padding: 20px;
+  }
+
+  footer {
+    background: #CCC;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 8px;
+    font-size: 130%;
+    font-weight: bold;
+
+    a {
+      float: right;
+    }
+  }
+
+  h3 {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  #new-todo {
+    width: 75%;
+    font-size: 130%;
+    padding: 5px;
+  }
+
+  #toggle-all {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 8px;
+  }
+
+  label {
+    display: inline-block;
+  }
+
+  #todo-list {
+    color: #555;
+    display: block;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    max-height: 260px;
+    overflow: auto;
+
+    li {
+      @include transition(border-left 0.3s);
+      border-left: 8px solid $red;
+      border-top: 1px solid #CCC;
+      padding: 8px;
+
+      &:last-child {
+        border-bottom: 1px solid #CCC;
+      }
+
+      .icon-remove-circle {
+        display: block;
+        margin-top: 5px;
+      }
+
+      &.done {
+        border-left: 8px solid #CCC;
+
+        label {
+          text-decoration: line-through;
+        }
+      }
+    }
+
+    label, input, a {
+      display: inline-block;
+    }
+
+    input {
+      margin-bottom: 5px;
+      margin-right: 10px;
+    }
+
+    label {
+      font-size: 140%;
+      line-height: 140%;
+    }
+
+    .destroy {
+      text-decoration: none;
+      color: #555;
+      float: right;
+      font-size: 180%;
+      cursor: pointer;
+
+      &:hover {
+        color: #CCC;
+      }
+    }
+
+    .edit {
+      display: none;
+    }
+
+    li.editing {
+      .edit {
+        display: block;
+      }
+
+      .view {
+        display: none;
+      }
+    }
+  }
+}
+
+#instructions {
+  font-style: italic;
+}
+
+.what-is-happening {
+  height: 450px;
+  display: table !important;
+  padding: 20px;
+
+  div {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
+.icon-github-sign {
+  margin-right: 10px;
+}
 
 .hero-unit {
     margin: 50px auto 0 auto;
