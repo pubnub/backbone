@@ -5,6 +5,8 @@ This is a framework for [Backbone](http://backbonejs.org) integration with [PubN
 
 PubNub is a real-time network that provides the core tools to build real-time applications and scale them globally. Backbone gives structure to web applications with bindings and events for web application data. Combining the two gives a rich application experience for multi-user applications such as collaboritive editing, chat rooms, and even multiplayer games.
 
+Check out the demo here: [http://pubnub.github.io/backbone/](http://pubnub.github.io/backbone/)
+
 # Installation
 
 You can install the package using bower and `bower install pubnub-backbone` or by cloning this repository. Install the PubNub library along with this one in your html file like so, replacing the *'s with the PubNub version you want to use:
