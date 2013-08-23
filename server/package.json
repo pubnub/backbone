@@ -1,5 +1,5 @@
 {
-  "name": "backbone",
+  "name": "pubnub-backbone",
   "version": "0.0.1",
   "description": "A server for storing todos in a backbone integration with PubNub.",
   "main": "index.js",
@@ -11,6 +11,7 @@
   "license": "BSD",
   "dependencies": {
     "pubnub": "~3.5.3",
+    "backbone": "~1.0.0",
     "underscore": "~1.5.1"
   }
 }

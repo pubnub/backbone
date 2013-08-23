@@ -1,7 +1,9 @@
 # Start by creating our PubNub instance
+uuid = PUBNUB.uuid()
 pubnub = PUBNUB.init
   subscribe_key: 'sub-c-4c7f1748-ced1-11e2-a5be-02ee2ddab7fe'
   publish_key: 'pub-c-6dd9f234-e11e-4345-92c4-f723de52df70'
+  uuid: uuid
 
 Todo = Backbone.Model.extend
   defaults: () ->
@@ -185,3 +187,15 @@ MyModelView = Backbone.View.extend
     @$el.html @template(mymodel.toJSON())
 
 modelview = new MyModelView
+
+# Initially get the list of todos from the server
+pubnub.subscribe
+  channel: uuid
+  callback: (message) ->
+    data = message
+    Todos.set data
+  connect: () ->
+    pubnub.publish
+      channel: 'getTodos'
+      message:
+        uuid: uuid

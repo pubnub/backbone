@@ -1,0 +1,7 @@
+www:
+  type: nodejs
+  approot: .
+  processes:
+    app: node index.js
+  config:
+    node_version: v0.10.x
