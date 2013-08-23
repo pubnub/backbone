@@ -1,6 +1,6 @@
 {
   "name": "pubnub-backbone",
-  "version": "0.0.1",
+  "version": "0.0.1-1",
   "description": "A server for storing todos in a backbone integration with PubNub.",
   "main": "index.js",
   "scripts": {
