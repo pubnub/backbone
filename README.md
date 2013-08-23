@@ -12,7 +12,7 @@ Check out the demo here: [http://pubnub.github.io/backbone/](http://pubnub.githu
 You can install the package using bower and `bower install pubnub-backbone` or by cloning this repository. Install the PubNub library along with this one in your html file like so, replacing the *'s with the PubNub version you want to use:
 
 ```html
-<script src="http://cdn.pubnub.com/pubnub-*.*.*.min.js"></script>
+<script src="http://cdn.pubnub.com/pubnub.min.js"></script>
 <script src="/path/to/backbone-pubnub.min.js"></script>
 ```
 
