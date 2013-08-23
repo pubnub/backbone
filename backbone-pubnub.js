@@ -223,8 +223,7 @@
       });
     },
     constructor: function(model, options) {
-      var updateModel,
-        _this = this;
+      var _this = this;
       Backbone.Model.apply(this, arguments);
       if (options && options.pubnub && options.name) {
         this.pubnub = options.pubnub;
@@ -232,10 +231,7 @@
       }
       this.uuid = this.pubnub.uuid();
       this.channel = "backbone-model-" + this.name;
-      updateModel = function(model, options) {
-        return this.publish("update", model, options);
-      };
-      this.listenTo(this, 'change', updateModel, this);
+      this.on('change', this._onChange, this);
       return this.pubnub.subscribe({
         channel: this.channel,
         callback: function(message) {
@@ -251,14 +247,19 @@
         }
       });
     },
+    _onChange: function(model, options) {
+      return this.publish("update", model, options);
+    },
     _onChanged: function(model, options) {
       var diff,
         _this = this;
+      this.off('change', this._onChange, this);
       diff = _.difference(_.keys(this.attributes), _.keys(model));
       _.each(diff, function(key) {
         return _this.unset(key);
       });
-      return this.set(model);
+      this.set(model);
+      return this.on('change', this._onChange, this);
     },
     _onRemoved: function(options) {
       return Backbone.Model.prototype.destroy.apply(this, arguments);
