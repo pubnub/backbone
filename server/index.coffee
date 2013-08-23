@@ -68,3 +68,10 @@ app = unicaster.listen pubnub
 # Return the list of todos
 app.on 'getTodos', (req, resp) ->
   resp.end Todos.toJSON()
+
+# For cloud deploying
+http = require 'http'
+app = http.createServer (req, res) ->
+  res.writeHead 200, { 'Content-Type': 'text/html' }
+  res.end 'Okay'
+app.listen process.env.PORT ? 5000
