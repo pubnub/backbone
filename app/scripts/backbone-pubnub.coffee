@@ -230,10 +230,7 @@ Backbone.PubNub.Model = Backbone.Model.extend
     @uuid = @pubnub.uuid()
     @channel = "backbone-model-#{@name}"
 
-    # Publish changes when this model is changed
-    updateModel = (model, options) ->
-      @publish "update", model, options
-    @listenTo this, 'change', updateModel, this
+    @on 'change', @_onChange, this
 
     # Subscribe to updates from other instances of this model
     @pubnub.subscribe
@@ -246,13 +243,19 @@ Backbone.PubNub.Model = Backbone.Model.extend
             when "update" then @_onChanged message.model, message.options
             when "delete" then @_onRemoved message.options
 
+  # Publish changes when this model is changed
+  _onChange: (model, options) ->
+    @publish "update", model, options
+
   _onChanged: (model, options) ->
+    @off 'change', @_onChange, this
     # Manually find the difference and update this model
     diff = _.difference _.keys(@attributes), _.keys(model)
     _.each diff, (key) =>
       @unset key
 
     @set model
+    @on 'change', @_onChange, this
 
   _onRemoved: (options) ->
     Backbone.Model.prototype.destroy.apply this, arguments
