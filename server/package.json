@@ -4,7 +4,8 @@
   "description": "A server for storing todos in a backbone integration with PubNub.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": "",
   "author": "",
@@ -13,5 +14,9 @@
     "pubnub": "~3.5.3",
     "backbone": "~1.0.0",
     "underscore": "~1.5.1"
+  },
+  "subdomain": "pubnub-backbone",
+  "engines": {
+    "node": "0.10.x"
   }
 }
