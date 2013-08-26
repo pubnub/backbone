@@ -199,3 +199,11 @@ pubnub.subscribe
       channel: 'getTodos'
       message:
         uuid: uuid
+
+# Mixpanel Tracking
+mixpanel.track_links '#github', 'GitHub repo click',
+  repository: 'pubnub/backbone'
+
+mixpanel.track_links '#get-started', 'Get started click',
+  repository: 'pubnub/backbone',
+  type: 'Call To Action'
