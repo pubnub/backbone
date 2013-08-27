@@ -83,6 +83,8 @@ _.extend Backbone.PubNub.prototype,
 Backbone.PubNub.sync = (method, model, options) ->
   pubnub = model.pubnub ? model.collection.pubnub
 
+  console.log method, model, options, pubnub
+
   try
     switch method
       when "read" then resp = pubnub.read model
@@ -91,7 +93,7 @@ Backbone.PubNub.sync = (method, model, options) ->
       when "delete" then resp = pubnub.destroy model
   catch error
     errorMessage = error.message
-    console.log "ERROR", error
+    console.log "Could not sync: #{errorMessage}"
 
 # Save the old sync method for later use
 _sync = Backbone.sync
@@ -113,6 +115,12 @@ Backbone.sync = (method, model, options) ->
 # to other instances.
 ################
 Backbone.PubNub.Collection = Backbone.Collection.extend
+  sync: () ->
+    # Ignore sync methods
+
+  fetch: () ->
+    # Ignore fetch methods
+
   # Publishes a change to the pubnub channel
   publish: (method, model, options) ->
     message =
@@ -165,6 +173,7 @@ Backbone.PubNub.Collection = Backbone.Collection.extend
 
       unless record?
         console.log "Could not find model with ID: #{model.id}"
+        return false
 
       # Since there is no native update record we have to find the differences manually
       diff = _.difference _.keys(record.attributes), _.keys(model)
