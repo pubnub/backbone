@@ -69,7 +69,7 @@
             return record.id === data.model.id;
           });
           if (record == null) {
-            console.log("Could not record: " + model.id);
+            console.log("Could not find record: " + data.model.id);
             return false;
           }
           diff = _.difference(_.keys(record.attributes), _.keys(data.model));

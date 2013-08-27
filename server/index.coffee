@@ -55,7 +55,7 @@ pubnub.subscribe
           record.id is data.model.id
 
         unless record?
-          console.log "Could not record: #{model.id}"
+          console.log "Could not find record: #{data.model.id}"
           return false
 
         diff = _.difference _.keys(record.attributes), _.keys(data.model)
