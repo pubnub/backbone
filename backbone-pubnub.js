@@ -87,6 +87,7 @@
   Backbone.PubNub.sync = function(method, model, options) {
     var error, errorMessage, pubnub, resp, _ref;
     pubnub = (_ref = model.pubnub) != null ? _ref : model.collection.pubnub;
+    console.log(method, model, options, pubnub);
     try {
       switch (method) {
         case "read":
@@ -101,7 +102,7 @@
     } catch (_error) {
       error = _error;
       errorMessage = error.message;
-      return console.log("ERROR", error);
+      return console.log("Could not sync: " + errorMessage);
     }
   };
 
@@ -172,6 +173,7 @@
         });
         if (record == null) {
           console.log("Could not find model with ID: " + model.id);
+          return false;
         }
         diff = _.difference(_.keys(record.attributes), _.keys(model));
         _.each(diff, function(key) {
@@ -190,7 +192,6 @@
         model = models[_i];
         if (model.id == null) {
           model.id = this.pubnub.uuid();
-          model.set(model.idAttribute, model.id);
         }
         this.publish("create", model, options);
       }

@@ -14,7 +14,7 @@ Todo = Backbone.Model.extend
     }
 
   toggle: () ->
-    @save
+    @set
       done: !@get 'done'
 
 TodoList = Backbone.PubNub.Collection.extend
@@ -25,10 +25,6 @@ TodoList = Backbone.PubNub.Collection.extend
 
   constructor: () ->
     Backbone.PubNub.Collection.apply this, arguments
-
-    # Since this is real-time we now need to listen for remote remove events
-    @listenTo this, 'remove', (model) ->
-      model.destroy()
 
   done: () ->
     @where { done: true }
@@ -58,8 +54,7 @@ TodoView = Backbone.View.extend
 
   initialize: () ->
     @listenTo @model, 'change', @render
-    @listenTo @model, 'destroy', () =>
-      @remove()
+    @listenTo @model, 'remove', @remove
 
   render: () ->
     @$el.html @template @model.toJSON()
@@ -80,14 +75,14 @@ TodoView = Backbone.View.extend
     if not value
       @clear()
     else
-      @model.save { title: value }
+      @model.set { title: value }
       @$el.removeClass 'editing'
 
   updateOnEnter: (event) ->
     if event.keyCode is 13 then @close()
 
   clear: () ->
-    @model.destroy()
+    Todos.remove @model
 
 AppView = Backbone.View.extend
   el: $ '#todoapp'
@@ -135,17 +130,18 @@ AppView = Backbone.View.extend
     if event.keyCode isnt 13 then return
     if not @input.val() then return
 
-    Todos.create { title: @input.val() }
+    Todos.add { title: @input.val() }
     @input.val ''
 
   clearCompleted: () ->
-    _.invoke Todos.done(), 'destroy'
+    _.each Todos.done(), (model) ->
+      Todos.remove model
     false
 
   toggleAllCompleted: () ->
     done = @allCheckbox.checked
     Todos.each (todo) ->
-      todo.save { 'done': done }
+      todo.set { 'done': done }
 
 App = new AppView
 
@@ -168,10 +164,8 @@ MyModelView = Backbone.View.extend
 
   events:
     'click #update': 'onUpdateClick'
-    'click #delete': 'onDeleteClick'
 
   initialize: () ->
-    @listenTo mymodel, 'destroy', @render
     @listenTo mymodel, 'all', @render
 
     @render()
@@ -179,9 +173,6 @@ MyModelView = Backbone.View.extend
   onUpdateClick: (event) ->
     mymodel.set
       rand: Math.random()
-
-  onDeleteClick: (event) ->
-    mymodel.destroy()
 
   render: () ->
     @$el.html @template(mymodel.toJSON())

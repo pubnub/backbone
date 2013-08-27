@@ -115,12 +115,6 @@ Backbone.sync = (method, model, options) ->
 # to other instances.
 ################
 Backbone.PubNub.Collection = Backbone.Collection.extend
-  sync: () ->
-    # Ignore sync methods
-
-  fetch: () ->
-    # Ignore fetch methods
-
   # Publishes a change to the pubnub channel
   publish: (method, model, options) ->
     message =
@@ -194,7 +188,6 @@ Backbone.PubNub.Collection = Backbone.Collection.extend
       # Backbone will not give us change or remove events
       unless model.id?
         model.id = @pubnub.uuid()
-        model.set model.idAttribute, model.id
 
       @publish "create", model, options
 
