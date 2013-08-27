@@ -142,6 +142,7 @@ Backbone.PubNub.Collection = Backbone.Collection.extend
     @pubnub.subscribe
       channel: @channel
       callback: (message) =>
+        @off 'change', updateModel, this
         message = JSON.parse message
 
         unless message.uuid is @uuid
@@ -149,11 +150,12 @@ Backbone.PubNub.Collection = Backbone.Collection.extend
             when "create" then @_onAdded message.model, message.options
             when "update" then @_onChanged message.model, message.options
             when "delete" then @_onRemoved message.model, message.options
+        @on 'change', updateModel, this
 
     # When the collection changes we post updates to everyone else
     updateModel = (model) ->
       @publish "update", model
-    @listenTo this, 'change', updateModel, this
+    @on 'change', updateModel, this
 
   # Called when another client adds a record
   _onAdded: (model, options) ->

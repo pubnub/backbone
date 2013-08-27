@@ -1,4 +1,4 @@
-/*! pubnub-backbone - v0.1.5 - 2013-08-27 | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */
+/*! pubnub-backbone - v0.1.6 - 2013-08-27 | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */
 (function() {
   var _sync;
 
@@ -145,23 +145,27 @@
       this.pubnub.subscribe({
         channel: this.channel,
         callback: function(message) {
+          _this.off('change', updateModel, _this);
           message = JSON.parse(message);
           if (message.uuid !== _this.uuid) {
             switch (message.method) {
               case "create":
-                return _this._onAdded(message.model, message.options);
+                _this._onAdded(message.model, message.options);
+                break;
               case "update":
-                return _this._onChanged(message.model, message.options);
+                _this._onChanged(message.model, message.options);
+                break;
               case "delete":
-                return _this._onRemoved(message.model, message.options);
+                _this._onRemoved(message.model, message.options);
             }
           }
+          return _this.on('change', updateModel, _this);
         }
       });
       updateModel = function(model) {
         return this.publish("update", model);
       };
-      return this.listenTo(this, 'change', updateModel, this);
+      return this.on('change', updateModel, this);
     },
     _onAdded: function(model, options) {
       return Backbone.Collection.prototype.add.apply(this, [model, options]);
