@@ -405,7 +405,8 @@ module.exports = function (grunt) {
         'uglify',
         'copy:dist',
         'rev',
-        'usemin'
+        'usemin',
+        'lib'
     ]);
 
     grunt.registerTask('default', [
