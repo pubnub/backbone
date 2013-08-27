@@ -59,26 +59,24 @@
 
       console.log(message);
       data = JSON.parse(message);
-      if (!((data != null) && (data.method != null) && (data.model != null))) {
-        if (data.method === "create") {
-          return Todos.add(data.model);
-        } else if (data.method === "delete") {
-          return Todos.remove(data.model);
-        } else if (data.method === "update") {
-          if (!!data.model.id) {
-            record = _.find(Todos.models, function(record) {
-              return record.id === data.model.id;
-            });
-            if (record == null) {
-              console.log("Could not find record: " + model.id);
-              return false;
-            }
-            diff = _.difference(_.keys(record.attributes), _.keys(data.model));
-            _.each(diff, function(key) {
-              return record.unset(key);
-            });
-            return record.set(data.model, data.options);
+      if (data.method === "create") {
+        return Todos.add(data.model);
+      } else if (data.method === "delete") {
+        return Todos.remove(data.model);
+      } else if (data.method === "update") {
+        if (!!data.model.id) {
+          record = _.find(Todos.models, function(record) {
+            return record.id === data.model.id;
+          });
+          if (record == null) {
+            console.log("Could not record: " + model.id);
+            return false;
           }
+          diff = _.difference(_.keys(record.attributes), _.keys(data.model));
+          _.each(diff, function(key) {
+            return record.unset(key);
+          });
+          return record.set(data.model, data.options);
         }
       }
     }

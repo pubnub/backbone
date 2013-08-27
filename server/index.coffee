@@ -45,25 +45,24 @@ pubnub.subscribe
 
     data = JSON.parse message
 
-    unless data? and data.method? and data.model?
-      if data.method is "create"
-        Todos.add data.model
-      else if data.method is "delete"
-        Todos.remove data.model
-      else if data.method is "update"
-        unless not data.model.id
-          record = _.find Todos.models, (record) ->
-            record.id is data.model.id
+    if data.method is "create"
+      Todos.add data.model
+    else if data.method is "delete"
+      Todos.remove data.model
+    else if data.method is "update"
+      unless not data.model.id
+        record = _.find Todos.models, (record) ->
+          record.id is data.model.id
 
-          unless record?
-            console.log "Could not find record: #{model.id}"
-            return false
+        unless record?
+          console.log "Could not record: #{model.id}"
+          return false
 
-          diff = _.difference _.keys(record.attributes), _.keys(data.model)
-          _.each diff, (key) ->
-            record.unset key
+        diff = _.difference _.keys(record.attributes), _.keys(data.model)
+        _.each diff, (key) ->
+          record.unset key
 
-          record.set data.model, data.options
+        record.set data.model, data.options
 
 app = unicaster.listen pubnub
 
