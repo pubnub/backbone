@@ -164,7 +164,7 @@ Backbone.PubNub.Collection = Backbone.Collection.extend
         record.id is model.id
 
       unless record?
-        throw new Error "Could not find model with ID: #{model.id}"
+        console.log "Could not find model with ID: #{model.id}"
 
       # Since there is no native update record we have to find the differences manually
       diff = _.difference _.keys(record.attributes), _.keys(model)

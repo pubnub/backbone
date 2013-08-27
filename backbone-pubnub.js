@@ -171,7 +171,7 @@
           return record.id === model.id;
         });
         if (record == null) {
-          throw new Error("Could not find model with ID: " + model.id);
+          console.log("Could not find model with ID: " + model.id);
         }
         diff = _.difference(_.keys(record.attributes), _.keys(model));
         _.each(diff, function(key) {
