@@ -203,9 +203,24 @@ module.exports = function (grunt) {
         },
         // not used since Uglify task does concat,
         // but still available if needed
-        /*concat: {
-            dist: {}
-        },*/
+        concat: {
+            lib: {
+                options: {
+                    banner: '/*! <%= packageInfo.name %> - v<%= packageInfo.version %> - ' +
+                            '<%= grunt.template.today("yyyy-mm-dd") %> | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */\n',
+                },
+                src: ['backbone-pubnub.js'],
+                dest: 'backbone-pubnub.js'
+            },
+            libMin: {
+                options: {
+                    banner: '/*! <%= packageInfo.name %> - v<%= packageInfo.version %> - ' +
+                            '<%= grunt.template.today("yyyy-mm-dd") %> | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */\n',
+                },
+                src: ['backbone-pubnub.min.js'],
+                dest: 'backbone-pubnub.min.js'
+            }
+        },
         // not enabled since usemin task does concat and uglify
         // check index.html to edit your build targets
         // enable this task if you prefer defining your build targets here
@@ -402,6 +417,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('lib', [
         'coffee:lib',
-        'uglify:lib'
+        'uglify:lib',
+        'concat:lib',
+        'concat:libMin'
     ]);
 };

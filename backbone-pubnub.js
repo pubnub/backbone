@@ -1,3 +1,4 @@
+/*! pubnub-backbone - v0.1.5 - 2013-08-27 | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */
 (function() {
   var _sync;
 
