@@ -46,12 +46,11 @@ var myCollection = new MyCollection();
 
 # Backbone.sync
 
-The Backbone.sync method allows you to have a collection with a remote store, much like the LocalStorage module from the original Backbone Todos demo. This allows you to take updates from other clients when you want them and not automatically.
+The Backbone.sync method allows you to have a regular collection with a remote store, much like the LocalStorage module from the original Backbone Todos demo. This allows you to take updates from other clients when you want them and not automatically.
 
 ```javascript
 var MyCollection = Backbone.Collection.extend({
-  name: 'MyCollection', // Used to namespace the updates to this collection
-  pubnub: pubnub        // A global instance of PubNub
+  pubnub: new Backbone.PubNub(pubnub, "MyCollection") // A PubNub plugin to make the collection real-time
 });
 
 var myCollection = new MyCollection();

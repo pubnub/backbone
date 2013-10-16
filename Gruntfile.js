@@ -207,7 +207,7 @@ module.exports = function (grunt) {
             lib: {
                 options: {
                     banner: '/*! <%= packageInfo.name %> - v<%= packageInfo.version %> - ' +
-                            '<%= grunt.template.today("yyyy-mm-dd") %> | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */\n',
+                            '<%= grunt.template.today("yyyy-mm-dd") %> | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */\n'
                 },
                 src: ['backbone-pubnub.js'],
                 dest: 'backbone-pubnub.js'
@@ -215,7 +215,7 @@ module.exports = function (grunt) {
             libMin: {
                 options: {
                     banner: '/*! <%= packageInfo.name %> - v<%= packageInfo.version %> - ' +
-                            '<%= grunt.template.today("yyyy-mm-dd") %> | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */\n',
+                            '<%= grunt.template.today("yyyy-mm-dd") %> | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */\n'
                 },
                 src: ['backbone-pubnub.min.js'],
                 dest: 'backbone-pubnub.min.js'
