@@ -120,8 +120,7 @@ var myCollection = new MyCollection();</pre></p>
 
           <p><pre class="prettyprint linenums">
 var MyCollection = Backbone.Collection.extend({
-  name: &#39;MyCollection&#39;, // Used to namespace the updates to this collection
-  pubnub: pubnub        // A global instance of PubNub
+  pubnub: new Backbone.PubNub(pubnub, "MyCollection") // A PubNub plugin to make the collection real-time
 });
 
 var myCollection = new MyCollection();</pre></p>
