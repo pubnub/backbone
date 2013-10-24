@@ -40,10 +40,8 @@ Todos = new TodoList
 # Subscribe to the todo list updates
 pubnub.subscribe
   channel: 'backbone-collection-TodoList'
-  callback: (message) ->
-    console.log message
-
-    data = JSON.parse message
+  callback: (data) ->
+    console.log data
 
     if data.method is "create"
       Todos.add data.model

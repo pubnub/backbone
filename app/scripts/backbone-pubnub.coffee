@@ -14,8 +14,6 @@ Backbone.PubNub = (ref, name) ->
   @ref.subscribe
     channel: @channel
     callback: (message) =>
-      message = JSON.parse message
-
       # We don't want to cause a loop by listening to our own events
       unless message.uuid is @uuid
         switch message.method
@@ -31,7 +29,6 @@ _.extend Backbone.PubNub.prototype,
       model: model
       options: options
       uuid: @uuid
-    message = JSON.stringify message
 
     @ref.publish
       channel: @channel
@@ -122,7 +119,6 @@ Backbone.PubNub.Collection = Backbone.Collection.extend
       model: model
       options: options
       uuid: @uuid
-    message = JSON.stringify message
 
     @pubnub.publish
       channel: @channel
@@ -143,7 +139,6 @@ Backbone.PubNub.Collection = Backbone.Collection.extend
       channel: @channel
       callback: (message) =>
         @off 'change', updateModel, this
-        message = JSON.parse message
 
         unless message.uuid is @uuid
           switch message.method
@@ -218,7 +213,6 @@ Backbone.PubNub.Model = Backbone.Model.extend
       model: model
       options: options
       uuid: @uuid
-    message = JSON.stringify message
 
     @pubnub.publish
       channel: @channel
@@ -240,8 +234,6 @@ Backbone.PubNub.Model = Backbone.Model.extend
     @pubnub.subscribe
       channel: @channel
       callback: (message) =>
-        message = JSON.parse message
-
         unless message.uuid is @uuid
           switch message.method
             when "update" then @_onChanged message.model, message.options

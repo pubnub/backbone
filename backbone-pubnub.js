@@ -1,4 +1,4 @@
-/*! pubnub-backbone - v0.1.7 - 2013-10-16 | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */
+/*! pubnub-backbone - v0.1.8 - 2013-10-23 | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */
 (function() {
   var _sync;
 
@@ -12,7 +12,6 @@
     return this.ref.subscribe({
       channel: this.channel,
       callback: function(message) {
-        message = JSON.parse(message);
         if (message.uuid !== _this.uuid) {
           switch (message.method) {
             case "create":
@@ -36,7 +35,6 @@
         options: options,
         uuid: this.uuid
       };
-      message = JSON.stringify(message);
       return this.ref.publish({
         channel: this.channel,
         message: message
@@ -127,7 +125,6 @@
         options: options,
         uuid: this.uuid
       };
-      message = JSON.stringify(message);
       return this.pubnub.publish({
         channel: this.channel,
         message: message
@@ -146,7 +143,6 @@
         channel: this.channel,
         callback: function(message) {
           _this.off('change', updateModel, _this);
-          message = JSON.parse(message);
           if (message.uuid !== _this.uuid) {
             switch (message.method) {
               case "create":
@@ -222,7 +218,6 @@
         options: options,
         uuid: this.uuid
       };
-      message = JSON.stringify(message);
       return this.pubnub.publish({
         channel: this.channel,
         message: message
@@ -241,7 +236,6 @@
       return this.pubnub.subscribe({
         channel: this.channel,
         callback: function(message) {
-          message = JSON.parse(message);
           if (message.uuid !== _this.uuid) {
             switch (message.method) {
               case "update":

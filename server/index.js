@@ -54,11 +54,10 @@
 
   pubnub.subscribe({
     channel: 'backbone-collection-TodoList',
-    callback: function(message) {
-      var data, diff, record;
+    callback: function(data) {
+      var diff, record;
 
-      console.log(message);
-      data = JSON.parse(message);
+      console.log(data);
       if (data.method === "create") {
         return Todos.add(data.model);
       } else if (data.method === "delete") {
