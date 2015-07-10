@@ -138,21 +138,39 @@ Backbone.PubNub.Collection = Backbone.Collection.extend
     @pubnub.subscribe
       channel: @channel
       callback: (message) =>
-        @off 'change', updateModel, this
+        @off 'change', @_updateModel, this
 
         unless message.uuid is @uuid
           switch message.method
             when "create" then @_onAdded message.model, message.options
             when "update" then @_onChanged message.model, message.options
             when "delete" then @_onRemoved message.model, message.options
-        @on 'change', updateModel, this
+        @on 'change', @_updateModel, this
 
     # When the collection changes we post updates to everyone else
-    updateModel = (model) ->
-      @publish "update", model
-    @on 'change', updateModel, this
+    @on 'change', @_updateModel, this
 
-  # Called when another client adds a record
+  _updateModel: (model) ->
+    @pubnub.publish "update", model
+
+  # fetch messages from the history
+  # TODO options should not be hardcoded here, should be taken as argument
+  history: () ->
+    @pubnub.history
+      channel: @channel,
+      count: 100
+      callback: (results) =>
+        messages = _.chain(results)
+        .first()
+        .pluck('model')
+        .reject(_.isUndefined)
+        .value()
+
+        @off 'change', @_updateModel, @
+        @reset messages
+        @on 'change', @_updateModel, @
+
+# Called when another client adds a record
   _onAdded: (model, options) ->
     Backbone.Collection.prototype.add.apply this, [model, options]
 

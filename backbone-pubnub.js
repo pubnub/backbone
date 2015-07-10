@@ -1,4 +1,3 @@
-/*! pubnub-backbone - v0.1.8 - 2013-10-23 | (c) 2013 PubNub MIT License https://github.com/pubnub/backbone/blob/master/LICENSE */
 (function() {
   var _sync;
 
@@ -131,8 +130,7 @@
       });
     },
     constructor: function(models, options) {
-      var updateModel,
-        _this = this;
+      var _this = this;
       Backbone.Collection.apply(this, arguments);
       if (options && options.pubnub) {
         this.pubnub = options.pubnub;
@@ -142,7 +140,7 @@
       this.pubnub.subscribe({
         channel: this.channel,
         callback: function(message) {
-          _this.off('change', updateModel, _this);
+          _this.off('change', _this._updateModel, _this);
           if (message.uuid !== _this.uuid) {
             switch (message.method) {
               case "create":
@@ -155,13 +153,27 @@
                 _this._onRemoved(message.model, message.options);
             }
           }
-          return _this.on('change', updateModel, _this);
+          return _this.on('change', _this._updateModel, _this);
         }
       });
-      updateModel = function(model) {
-        return this.publish("update", model);
-      };
-      return this.on('change', updateModel, this);
+      return this.on('change', this._updateModel, this);
+    },
+    _updateModel: function(model) {
+      return this.pubnub.publish("update", model);
+    },
+    history: function() {
+      var _this = this;
+      return this.pubnub.history({
+        channel: this.channel,
+        count: 100,
+        callback: function(results) {
+          var messages;
+          messages = _.chain(results).first().pluck('model').reject(_.isUndefined).value();
+          _this.off('change', _this._updateModel, _this);
+          _this.reset(messages);
+          return _this.on('change', _this._updateModel, _this);
+        }
+      });
     },
     _onAdded: function(model, options) {
       return Backbone.Collection.prototype.add.apply(this, [model, options]);
