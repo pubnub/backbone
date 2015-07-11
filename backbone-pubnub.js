@@ -161,11 +161,12 @@
     _updateModel: function(model) {
       return this.pubnub.publish("update", model);
     },
-    history: function() {
-      var _this = this;
-      return this.pubnub.history({
-        channel: this.channel,
+    history: function(options) {
+      var defaults,
+        _this = this;
+      defaults = {
         count: 100,
+        channel: this.channel,
         callback: function(results) {
           var messages;
           messages = _.chain(results).first().pluck('model').reject(_.isUndefined).value();
@@ -173,7 +174,8 @@
           _this.reset(messages);
           return _this.on('change', _this._updateModel, _this);
         }
-      });
+      };
+      return this.pubnub.history(_.extend(defaults, options));
     },
     _onAdded: function(model, options) {
       return Backbone.Collection.prototype.add.apply(this, [model, options]);
