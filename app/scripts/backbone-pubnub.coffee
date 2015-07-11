@@ -155,20 +155,24 @@ Backbone.PubNub.Collection = Backbone.Collection.extend
 
   # fetch messages from the history
   # TODO options should not be hardcoded here, should be taken as argument
-  history: () ->
-    @pubnub.history
-      channel: @channel,
-      count: 100
-      callback: (results) =>
-        messages = _.chain(results)
-        .first()
-        .pluck('model')
-        .reject(_.isUndefined)
-        .value()
+  history: (options) ->
+    defaults =
+        count:100
+        channel: @channel
+        callback: (results) =>
+            messages = _.chain(results)
+            .first()
+            .pluck('model')
+            .reject(_.isUndefined)
+            .value()
+            @off 'change', @_updateModel, @
+            @reset messages
+            @on 'change', @_updateModel, @
 
-        @off 'change', @_updateModel, @
-        @reset messages
-        @on 'change', @_updateModel, @
+
+
+    @pubnub.hist_.extend defaults, ory options
+
 
 # Called when another client adds a record
   _onAdded: (model, options) ->
