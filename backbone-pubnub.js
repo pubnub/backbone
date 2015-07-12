@@ -165,7 +165,7 @@
       var defaults,
         _this = this;
       defaults = {
-        count: 100,
+        count: 30,
         channel: this.channel,
         callback: function(results) {
           var messages;
