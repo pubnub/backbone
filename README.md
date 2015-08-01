@@ -44,6 +44,21 @@ var MyCollection = Backbone.PubNub.Collection.extend({
 var myCollection = new MyCollection();
 ```
 
+# Backbone.PubNub.Collection#history
+
+`history()` implements the PubNub History API, retrieves items from the storage.
+
+```javascript
+var MyCollection = Backbone.PubNub.Collection.extend({
+  name: 'MyCollection', // Used to namespace the updates to this collection
+  pubnub: pubnub        // A global instance of PubNub
+});
+
+var myCollection = new MyCollection();
+
+myCollection.history({count: 50});    // fetches 50 items from the storage
+```
+
 # Backbone.sync
 
 The Backbone.sync method allows you to have a regular collection with a remote store, much like the LocalStorage module from the original Backbone Todos demo. This allows you to take updates from other clients when you want them and not automatically.
